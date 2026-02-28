@@ -17,8 +17,13 @@ async function bootstrap() {
   app.use(helmet());
 
   // ── CORS ──────────────────────────────────────────────────
+  const origin =
+    corsOrigin.trim() === '*'
+      ? true
+      : corsOrigin.split(',').map((o) => o.trim());
+
   app.enableCors({
-    origin: corsOrigin.split(',').map((o) => o.trim()),
+    origin,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
