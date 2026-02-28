@@ -1,4 +1,4 @@
-.env
+
 \node_modules
 \dist
 /node_modules
@@ -6,3 +6,9 @@
 package-lock.json
 .DS_Store
 .tsbuildinfo
+dist
+node_modules
+.env
+coverage
+*.js.map
+*.d.ts
