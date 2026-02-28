@@ -1,0 +1,87 @@
+// ============================================================
+// Prisma Schema — Sistema de Eventos (Painel do Organizador)
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Usuário (autenticação) ──────────────────────────────────
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("users")
+}
+
+// ─── Evento ──────────────────────────────────────────────────
+enum EventStatus {
+  ATIVO
+  ENCERRADO
+}
+
+model Event {
+  id        String      @id @default(uuid())
+  nome      String
+  dataHora  DateTime    @map("data_hora")
+  local     String
+  status    EventStatus @default(ATIVO)
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+
+  participantes Participant[]
+  regrasCheckin CheckinRule[]
+
+  @@map("events")
+}
+
+// ─── Participante ────────────────────────────────────────────
+enum CheckinStatus {
+  FEITO
+  NAO_FEITO
+}
+
+model Participant {
+  id        String        @id @default(uuid())
+  nome      String
+  email     String
+  eventoId  String        @map("evento_id")
+  checkin   CheckinStatus @default(NAO_FEITO)
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+
+  evento Event @relation(fields: [eventoId], references: [id], onDelete: Cascade)
+
+  @@map("participants")
+}
+
+// ─── Regra de Check-in ───────────────────────────────────────
+enum RuleRequired {
+  OBRIGATORIO
+  OPCIONAL
+}
+
+model CheckinRule {
+  id                String       @id @default(uuid())
+  nome              String
+  ativo             Boolean      @default(true)
+  obrigatoriedade   RuleRequired @default(OPCIONAL)
+  liberarMinAntes   Int          @default(0) @map("liberar_min_antes")
+  encerrarMinDepois Int          @default(0) @map("encerrar_min_depois")
+  eventoId          String       @map("evento_id")
+  createdAt         DateTime     @default(now()) @map("created_at")
+  updatedAt         DateTime     @updatedAt @map("updated_at")
+
+  evento Event @relation(fields: [eventoId], references: [id], onDelete: Cascade)
+
+  @@map("checkin_rules")
+}
