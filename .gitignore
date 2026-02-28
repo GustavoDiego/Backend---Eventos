@@ -12,3 +12,5 @@ node_modules
 coverage
 *.js.map
 *.d.ts
+/prisma
+\prisma
