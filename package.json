@@ -1,8 +1,8 @@
 {
   "name": "backend-eventos",
   "version": "1.0.0",
-  "description": "Backend NestJS para Sistema de Eventos — Painel do Organizador",
-  "author": "GustavoDiego",
+  "description": "Backend NestJS para o desafio de gerenciamento de eventos",
+  "author": "",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -16,6 +16,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/jest-e2e.json"
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
@@ -70,12 +72,8 @@
     "typescript": "~5.3.0"
   },
   "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
+    "moduleFileExtensions": ["js", "json", "ts"],
+    "roots": ["<rootDir>/src"],
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
