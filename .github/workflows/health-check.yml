@@ -1,0 +1,40 @@
+name: Health Check
+
+on:
+    schedule:
+        # Executa a cada 10 minutos
+        - cron: "*/10 * * * *"
+    workflow_dispatch: # Permite execução manual
+
+jobs:
+    health-check:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check health endpoint
+              run: |
+                  echo "🏥 Verificando health do serviço..."
+                  response=$(curl -s -w "\n%{http_code}" https://backend-eventos-gw6c.onrender.com/health)
+                  http_code=$(echo "$response" | tail -n1)
+                  body=$(echo "$response" | head -n-1)
+
+                  echo "Status HTTP: $http_code"
+                  echo "Resposta: $body"
+
+                  if [ "$http_code" -ne 200 ]; then
+                    echo "❌ Health check falhou com status $http_code"
+                    exit 1
+                  fi
+
+                  status=$(echo "$body" | grep -o '"status":"ok"' || echo "")
+                  if [ -z "$status" ]; then
+                    echo "❌ Health check não retornou status 'ok'"
+                    exit 1
+                  fi
+
+                  echo "✅ Serviço está saudável!"
+
+            - name: Notify on failure
+              if: failure()
+              run: |
+                  echo "⚠️ O serviço não está respondendo corretamente ao health check"
+                  echo "Timestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
