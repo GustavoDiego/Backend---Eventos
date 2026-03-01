@@ -9,6 +9,7 @@ import { EventsModule } from './events/events.module';
 import { ParticipantsModule } from './participants/participants.module';
 import { CheckinRulesModule } from './checkin-rules/checkin-rules.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { HealthModule } from './health/health.module';
 
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
@@ -43,6 +44,7 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
     ParticipantsModule,
     CheckinRulesModule,
     DashboardModule,
+    HealthModule,
   ],
   providers: [
     // Guard JWT global — todas rotas protegidas por padrão
