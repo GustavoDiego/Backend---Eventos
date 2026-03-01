@@ -13,7 +13,7 @@ jobs:
             - name: Check health endpoint
               run: |
                   echo "🏥 Verificando health do serviço..."
-                  response=$(curl -s -w "\n%{http_code}" https://backend-eventos-gw6c.onrender.com/health)
+                  response=$(curl -s -w "\n%{http_code}" https://backend-eventos-gw6c.onrender.com/api/health)
                   http_code=$(echo "$response" | tail -n1)
                   body=$(echo "$response" | head -n-1)
 
